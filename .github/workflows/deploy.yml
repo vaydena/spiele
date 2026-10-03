@@ -6,7 +6,8 @@ name: Deploy zu Hostinger
 # Playbook: reference_hostinger_ftps_deploy / feedback_ftps_upload_checkliste.
 #
 # Inhalt: index.html (eigenstaendiges Spiel "Blatti & Blumauto"), favicon.svg,
-#         deploy-version.txt (Marker fuer den Verify-Schritt).
+#         deploy-version.txt (Marker fuer den Verify-Schritt),
+#         netzjaeger/index.html (Ego-Shooter "Netzjaeger von Nordheim").
 #
 # ⛔ NIE mitdeployen (siehe find-Ausschluesse unten):
 #   - deploy-local.*, README.md, .gitignore, .git/, .github/, *.local.txt
@@ -174,7 +175,7 @@ jobs:
           want=$(grep -o '<title>[^<]*</title>' index.html | head -1)
           have=$(curl -s -A "$UA" "$SITE/index.html?cb=$RANDOM" | grep -o '<title>[^<]*</title>' | head -1)
           echo "index.html Titel: lokal=$want live=$have"; [ "$want" = "$have" ] || bad=1
-          for f in index.html favicon.svg deploy-version.txt; do
+          for f in index.html favicon.svg deploy-version.txt netzjaeger/index.html; do
             loc=$(stat -c %s "$f"); res=$(curl -s -A "$UA" -o /dev/null -w '%{http_code} %{size_download}' "$SITE/$f?cb=$RANDOM")
             echo "$f: lokal=$loc live=$res"; [ "$res" = "200 $loc" ] || bad=1
           done
